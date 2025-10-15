@@ -6,12 +6,17 @@
 /*   By: jleiva-g <jleiva-g@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 10:18:56 by jleiva-g          #+#    #+#             */
-/*   Updated: 2025/10/15 10:55:14 by jleiva-g         ###   ########.fr       */
+/*   Updated: 2025/10/15 11:10:26 by jleiva-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+
+int		size;
+int		total;
+char	**res;
+int		r_index;
 
 int	ft_strlen(char *s)
 {
@@ -36,12 +41,13 @@ void	ft_strcpy(char *dst, char *s)
 	dst[i] = '\0';
 }
 
-void	solve(int cur, int size, char *s, char ** all, int *index)
+// void	solve(int cur, char *s, int *index)
+void	solve(int cur, char *s)
 {
 	if (cur == size)
 	{
-		ft_strcpy(all[(*index)], s);
-		(*index)++;
+		ft_strcpy(res[r_index], s);
+		r_index++;
 		return;
 	}
 	for (int i = cur; i < size; i++)
@@ -49,7 +55,7 @@ void	solve(int cur, int size, char *s, char ** all, int *index)
 		char tmp = s[i];
 		s[i] = s[cur];
 		s[cur] = tmp;
-		solve(cur + 1, size, s, all, index);
+		solve(cur + 1, s);
 		tmp = s[i];
 		s[i] = s[cur];
 		s[cur] = tmp;
@@ -64,18 +70,17 @@ int	ft_strcmp(char *s1, char *s2)
 	return 0;
 }
 
-void	sort_res(char **all, int total)
+void	sort_res(void)
 {
-	int i, j;
-	for (i = 0; i < total; i++)
+	for (int i = 0; i < total; i++)
 	{
-		for (j = i + 1; j < total; j++)
+		for (int j = i + 1; j < total; j++)
 		{
-			if (ft_strcmp(all[i], all[j]) > 0)
+			if (ft_strcmp(res[i], res[j]) > 0)
 			{
-				char	*tmp = all[i];
-				all[i] = all[j];
-				all[j] = tmp;
+				char	*tmp = res[i];
+				res[i] = res[j];
+				res[j] = tmp;
 			}
 		}
 	}
@@ -89,20 +94,19 @@ int	main(int argc, char **argv)
 		return 1;
 	}
 	char	*s = argv[1];
-	int		size = ft_strlen(s);
+	size = ft_strlen(s);
 	if (!size)
 	{
 		puts("");
 		return 1;
 	}
-	int		total = ft_factorial(size);
-	char	**all = malloc(sizeof(char *) * total);
+	total = ft_factorial(size);
+	res = malloc(sizeof(char *) * total);
 	for (int i = 0; i < total; i++)
-		all[i] = calloc(size + 1, sizeof(char));
-	int	index = 0;
-	solve(0, size, s, all, &index);
-	sort_res(all, total);
+		res[i] = malloc(sizeof(char) * (size + 1));
+	solve(0, s);
+	sort_res();
 	for (int i = 0; i < total; i++)
-		puts(all[i]);
+		puts(res[i]);
 	return 0;
 }
