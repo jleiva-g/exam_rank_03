@@ -6,7 +6,7 @@
 /*   By: jleiva-g <jleiva-g@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 01:17:28 by jleiva-g          #+#    #+#             */
-/*   Updated: 2025/10/15 01:40:46 by jleiva-g         ###   ########.fr       */
+/*   Updated: 2025/10/15 02:05:26 by jleiva-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,21 @@
 #include <sys/types.h>
 #include <float.h>
 
+float	(*cities)[2];
+int		g_size;
+
 // compute the distance between two points
 float	distance(float a[2], float b[2])
 {
 	return sqrtf((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]));
 }
 
-float	get_total(float (*cities)[2], int *path, int size)
+float	get_total(int *path)
 {
-	int	cur;
-	int	next;
-	int	i;
+	int		cur, next, i;
 	float	total = 0.0f;
 
-	for (i = 0; i < size; i++)
+	for (i = 0; i < g_size - 1; i++)
 	{
 		cur = path[i];
 		next = path[i + 1];
@@ -44,21 +45,21 @@ float	get_total(float (*cities)[2], int *path, int size)
 	return total;
 }
 
-void	solve(float (*cities)[2], int *path, int size, int cur, float *best)
+void	solve(int *path, int cur, float *best)
 {
-	if (cur == size)
+	if (cur == g_size)
 	{
-		float	total = get_total(cities, path, size);
+		float	total = get_total(path);
 		if (total < *best)
 			*best = total;
 		return;
 	}
-	for (int i = cur; i < size; i++)
+	for (int i = cur; i < g_size; i++)
 	{
 		int	tmp = path[cur];
 		path[cur] = path[i];
 		path[i] = tmp;
-		solve(cities, path, size, cur + 1, best);
+		solve(path, cur + 1, best);
 		tmp = path[cur];
 		path[cur] = path[i];
 		path[i] = tmp;
@@ -78,7 +79,9 @@ float tsp(float (*array)[2], ssize_t size)
 		return FLT_MAX;
 	for (int i = 0; i < size; i++)
 		path[i] = i;
-	solve(array, path, size, 1, &best_distance);
+	cities = array;
+	g_size = size;
+	solve(path, 1, &best_distance);
 	free(path);
 
     return (best_distance);
