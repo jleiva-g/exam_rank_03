@@ -6,7 +6,7 @@
 /*   By: jleiva-g <jleiva-g@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 15:35:43 by jleiva-g          #+#    #+#             */
-/*   Updated: 2025/10/20 16:41:54 by jleiva-g         ###   ########.fr       */
+/*   Updated: 2025/10/23 01:10:35 by jleiva-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,23 @@ int	main(int argc, char **argv)
 		return 1;
 	}
 	char	c;
-	ssize_t	bread;
+	int		bread;
 	int		i = 0;
-	int		len = strlen(argv[1]);
 	while ((bread = read(0, &c, 1)) > 0)
 	{
 		if (i > MAX_INPUT_BUFFER_SIZE - 1)
-			break;
+		break;
 		buffer[i++] = c;
 	}
+	buffer[i] = '\0';
 	if (bread == -1)
 	{
 		perror("Error");
 		free(buffer);
 		return 1;
 	}
-	buffer[i] = '\0';
 	int j = 0;
+	int		len = strlen(argv[1]);
 	while (buffer[j])
 	{
 		if (j + len <= i && ft_strncmp(&buffer[j], argv[1], len))
