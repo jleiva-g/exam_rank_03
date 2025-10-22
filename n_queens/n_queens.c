@@ -6,7 +6,7 @@
 /*   By: jleiva-g <jleiva-g@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/12 21:07:19 by jleiva-g          #+#    #+#             */
-/*   Updated: 2025/10/13 04:19:00 by jleiva-g         ###   ########.fr       */
+/*   Updated: 2025/10/23 01:14:43 by jleiva-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	main(int argc, char **argv)
 	n = atoi(argv[1]);
 	if (n < 4)
 		return 0;
-	board = calloc(n, sizeof(int));
+	board = malloc(sizeof(int) * n);
 	if (!board)
 		return 1;
 	solve(0);
